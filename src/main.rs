@@ -19,7 +19,7 @@ struct SheetTemplate {
     sheet: CharacterSheet,
     calculated_score_modifier: Vec<CalculatedScoreModifier>,
     calculated_action: Vec<CalculatedAction>,
-    calculated_skill: Vec<CalculatedSkill>,
+    calculated_skill_rows: Vec<Vec<CalculatedSkill>>,
     calculated_saving_throw: Vec<CalculatedSavingThrow>,
     formatted_equipment: Vec<FormattedEquipment>,
     formatted_feats: Vec<FormattedFeatures>,
@@ -133,6 +133,12 @@ fn main() {
         })
     }
 
+    // Split skills into rows of 16 each
+    let calculated_skill_rows: Vec<Vec<CalculatedSkill>> = calculated_skill
+        .chunks(16)
+        .map(|chunk| chunk.to_vec())
+        .collect();
+
     let mut formatted_equipment: Vec<FormattedEquipment> = vec![];
     let mut formatted_equipment_counter = 1;
     for equipment in sheet.clone().equipment {
@@ -165,7 +171,7 @@ fn main() {
         sheet: sheet,
         calculated_score_modifier: calculated_score_modifier,
         calculated_action: calculated_action,
-        calculated_skill: calculated_skill,
+        calculated_skill_rows: calculated_skill_rows,
         calculated_saving_throw: calculated_saving_throw,
         formatted_equipment: formatted_equipment,
         formatted_feats: formatted_features,
@@ -193,7 +199,7 @@ struct CalculatedAction {
     text: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct CalculatedSkill {
     key: String,
     score_key: String,

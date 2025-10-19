@@ -110,34 +110,42 @@
             <th>Level</th>
             <th>Background</th>
             <th>Race</th>
+            <th>P Perception</th>
         </tr>
         <tr>
             <td>{{ sheet.metadata.class }}</td>
             <td>{{ sheet.metadata.level }}</td>
             <td>{{ sheet.metadata.background }}</td>
             <td>{{ sheet.metadata.race }}</td>
+            <td>{{ sheet.metadata.passive_perception }}</td>
         </tr>
         <tr>
             <th>Alignment</th>
             <th>Player Name</th>
             <th>Proficiency Bonus</th>
             <th>Initiative</th>
+            <th>Inspiration</th>
         </tr>
         <tr>
             <td>{{ sheet.metadata.alignment }}</td>
             <td>{{ sheet.metadata.player_name }}</td>
             <td>{{ sheet.metadata.proficiency_bonus }}</td>
             <td>{{ sheet.metadata.initiative }}</td>
+            <td></td>
         </tr>
         <tr>
             <th>Walking</th>
             <th>Swimming</th>
             <th>Climbing</th>
+            <th>DS Save</th>
+            <th>DS Fail</th>
         </tr>
         <tr>
             <td>{{ sheet.speeds.walking }}</td>
             <td>{{ sheet.speeds.swimming.unwrap_or(0) }}</td>
             <td>{{ sheet.speeds.climbing.unwrap_or(0) }}</td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <th>Copper</th>
@@ -209,32 +217,34 @@
         </tr>
     </table>
     <h1 class="text-xl">Skills</h1>
+    {% for skill_row in calculated_skill_rows %}
     <table>
         <tr>
             <th>Key</th>
-            {% for skill in calculated_skill %}
+            {% for skill in skill_row %}
             <td>{{ skill.key }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>Value</th>
-            {% for skill in calculated_skill %}
+            {% for skill in skill_row %}
             <td>{{ skill.value }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>Score</th>
-            {% for skill in calculated_skill %}
+            {% for skill in skill_row %}
             <td>{{ skill.score_key }}</td>
             {% endfor %}
         </tr>
         <tr>
             <th>Profficient</th>
-            {% for skill in calculated_skill %}
+            {% for skill in skill_row %}
             <td>{{ skill.profficient }}</td>
             {% endfor %}
         </tr>
     </table>
+    {% endfor %}
     <div class="flex flex-row">
         <div>
             <h1 class="text-xl">Actions</h1>

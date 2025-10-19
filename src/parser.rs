@@ -34,6 +34,7 @@ pub struct CharacterMetadata {
     pub player_name: String,
     pub proficiency_bonus: f64,
     pub initiative: f64,
+    pub passive_perception: i64,
 }
 
 #[derive(Deserialize, Debug, Clone)]
