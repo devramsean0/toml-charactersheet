@@ -1,0 +1,18 @@
+[package]
+authors = ["Sean Outram <me@sean.cyou>"]
+edition = "2021"
+# If you change the name here, you must also do it in flake.nix (and run `cargo generate-lockfile` afterwards)
+name = "toml-charactersheet"
+description = "A simple Rust project using Nix"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.100"
+askama = "0.14.0"
+clap = { version = "4.5.49", features = ["derive"] }
+markdown = "1.0.0"
+pandoc = "0.8.11"
+serde = { version = "1.0.228", features = ["derive"] }
+toml = "0.9.8"

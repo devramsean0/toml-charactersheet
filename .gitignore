@@ -1,0 +1,7 @@
+/target
+/result
+/result-lib
+.direnv
+sheet.*
+
+/.pre-commit-config.yaml

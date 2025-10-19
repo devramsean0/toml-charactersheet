@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            font-family: -webkit-system-font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body>* {
+            padding-bottom: 1rem;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+
+        .text-md {
+            font-size: 0.75rem;
+            line-height: 1.25rem;
+        }
+
+
+        .flex {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .flex-col {
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .justify-center {
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+
+        .self-center {
+            -webkit-align-self: center;
+            -ms-flex-item-align: center;
+            -ms-grid-row-align: center;
+            align-self: center;
+        }
+
+        .table-auto {
+            table-layout: auto;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .gap-2 {
+            border-spacing: 0.5rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin: 1rem 0 0.5rem 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="text-4xl flex justify-center self-center">{{ sheet.metadata.name }}</h1>
+    <table class="table-auto text-center">
+        <tr>
+            <th>Class</th>
+            <th>Level</th>
+            <th>Background</th>
+            <th>Race</th>
+        </tr>
+        <tr>
+            <td>{{ sheet.metadata.class }}</td>
+            <td>{{ sheet.metadata.level }}</td>
+            <td>{{ sheet.metadata.background }}</td>
+            <td>{{ sheet.metadata.race }}</td>
+        </tr>
+        <tr>
+            <th>Alignment</th>
+            <th>Player Name</th>
+            <th>Proficiency Bonus</th>
+            <th>Initiative</th>
+        </tr>
+        <tr>
+            <td>{{ sheet.metadata.alignment }}</td>
+            <td>{{ sheet.metadata.player_name }}</td>
+            <td>{{ sheet.metadata.proficiency_bonus }}</td>
+            <td>{{ sheet.metadata.initiative }}</td>
+        </tr>
+        <tr>
+            <th>Walking</th>
+            <th>Swimming</th>
+            <th>Climbing</th>
+        </tr>
+        <tr>
+            <td>{{ sheet.speeds.walking }}</td>
+            <td>{{ sheet.speeds.swimming.unwrap_or(0) }}</td>
+            <td>{{ sheet.speeds.climbing.unwrap_or(0) }}</td>
+        </tr>
+        <tr>
+            <th>Copper</th>
+            <th>Silver</th>
+            <th></th>
+            <th>Gold</th>
+            <th>Platinum</th>
+        </tr>
+        <tr>
+            <td>{{ sheet.money.cp.unwrap_or(0) }}</td>
+            <td>{{ sheet.money.sp.unwrap_or(0) }}</td>
+            <td>{{ sheet.money.ep.unwrap_or(0) }}</td>
+            <td>{{ sheet.money.gp.unwrap_or(0) }}</td>
+            <td>{{ sheet.money.pp.unwrap_or(0) }}</td>
+        </tr>
+        <tr>
+            <th>Max Health</th>
+            <th>Current Health</th>
+            <th>Temp</th>
+            <th>Dice</th>
+        </tr>
+        <tr>
+            <td>{{ sheet.health.max }}</td>
+            <td>{{ sheet.health.current }}</td>
+            <td>{{ sheet.health.temp }}</td>
+            <td>{{ sheet.health.dice }}</td>
+        </tr>
+    </table>
+    <h1 class="text-xl">Scores</h1>
+    <table>
+        <tr>
+            <th>Type</th>
+            {% for score in calculated_score_modifier %}
+            <td>{{ score.name }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Total</th>
+            {% for score in calculated_score_modifier %}
+            <td>{{ score.total }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Modifer</th>
+            {% for score in calculated_score_modifier %}
+            <td>{{ score.modifier }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <h1 class="text-xl">Saving Throws</h1>
+    <table>
+        <tr>
+            <th>Key</th>
+            {% for saving_throw in calculated_saving_throw %}
+            <td>{{ saving_throw.key }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Value</th>
+            {% for saving_throw in calculated_saving_throw %}
+            <td>{{ saving_throw.value }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Profficient</th>
+            {% for saving_throw in calculated_saving_throw %}
+            <td>{{ saving_throw.profficient }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <h1 class="text-xl">Skills</h1>
+    <table>
+        <tr>
+            <th>Key</th>
+            {% for skill in calculated_skill %}
+            <td>{{ skill.key }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Value</th>
+            {% for skill in calculated_skill %}
+            <td>{{ skill.value }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Score</th>
+            {% for skill in calculated_skill %}
+            <td>{{ skill.score_key }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>Profficient</th>
+            {% for skill in calculated_skill %}
+            <td>{{ skill.profficient }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <div class="flex flex-row">
+        <div>
+            <h1 class="text-xl">Actions</h1>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>ATK</th>
+                    <th>Damage</th>
+                    <th>Damage Type</th>
+                    <th>Text</th>
+                </tr>
+                {% for action in calculated_action %}
+                <tr>
+                    <td>{{ action.action_type }}</td>
+                    <td>{{ action.name }}</td>
+                    <td>{{ action.atk_bonus }}</td>
+                    <td>{% if let Some(damage) = action.damage %}{{ damage }}{% else %}-{% endif %}</td>
+                    <td>{% if let Some(dmg_type) = action.dmg_type %}{{ dmg_type }}{% else %}-{% endif %}</td>
+                    <td>{{ action.text }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div>
+            <h1 class="text-xl">Equipment</h1>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Text</th>
+                </tr>
+                {% for equipment in formatted_equipment %}
+                <tr>
+                    <td>{{ equipment.amount.unwrap_or(1) }}x {{ equipment.name }}</td>
+                    <td>{{ equipment.text }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <h1 class="text-xl">Features</h1>
+    {% for feat in formatted_feats %}
+    <div>
+        <h2 class="text-md">{{ feat.title }}</h2>
+        <p>{{ feat.text|safe }}</p>
+    </div>
+    {% endfor %}
+    <h1 class="text-xl">Tooltips</h1>
+    <table>
+        <tr>
+            <th>Key</th>
+            <th>Text</th>
+        </tr>
+        {% for tip in tooltips %}
+        <tr>
+            <td>{{ tip.key }}</td>
+            <td>{{ tip.text|safe }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
