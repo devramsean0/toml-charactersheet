@@ -150,7 +150,7 @@
         <tr>
             <th>Copper</th>
             <th>Silver</th>
-            <th></th>
+            <th>Electrum</th>
             <th>Gold</th>
             <th>Platinum</th>
         </tr>
@@ -217,8 +217,8 @@
         </tr>
     </table>
     <h1 class="text-xl">Skills</h1>
-    {% for skill_row in calculated_skill_rows %}
     <table>
+        {% for skill_row in calculated_skill_rows %}
         <tr>
             <th>Key</th>
             {% for skill in skill_row %}
@@ -243,8 +243,8 @@
             <td>{{ skill.profficient }}</td>
             {% endfor %}
         </tr>
+        {% endfor %}
     </table>
-    {% endfor %}
     <div class="flex flex-row">
         <div>
             <h1 class="text-xl">Actions</h1>

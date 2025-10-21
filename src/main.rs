@@ -60,9 +60,11 @@ fn main() {
         };
         let mut bonus = bonus_block_obj.map(|obj| obj.modifier).unwrap_or(0.0);
         if action.profficient.unwrap_or(false) {
+            println!("Added Profficiency Bonus to {}", action.name);
             bonus = bonus + sheet.metadata.clone().proficiency_bonus;
         }
         if action.magic_bonus.unwrap_or(false) {
+            println!("Added Magic Bonus to {}", action.name);
             bonus = bonus + 1.0;
         }
         let mut text = String::new();
@@ -74,10 +76,15 @@ fn main() {
             });
             calculated_action_counter = calculated_action_counter + 1;
         }
+        let mut damage: Option<String> = action.damage;
+        if damage.is_some() {
+            damage = Some(damage.unwrap() + "+" + bonus.to_string().as_str());
+        }
+
         calculated_action.push(CalculatedAction {
             action_type: action.action_type,
             name: action.name,
-            damage: action.damage,
+            damage: damage,
             dmg_type: action.dmg_type,
             text: text,
             atk_bonus: bonus,
