@@ -78,6 +78,11 @@ fn main() {
         }
         let mut damage: Option<String> = action.damage;
         if damage.is_some() {
+            let mut bonus = bonus_block_obj.map(|obj| obj.modifier).unwrap_or(0.0);
+            if action.magic_bonus.unwrap_or(false) {
+                println!("Added Magic Bonus to {} damage", action.name);
+                bonus = bonus + 1.0;
+            }
             damage = Some(damage.unwrap() + "+" + bonus.to_string().as_str());
         }
 
