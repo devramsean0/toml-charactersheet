@@ -59,7 +59,7 @@ fn main() {
             None
         };
         let mut bonus = bonus_block_obj.map(|obj| obj.modifier).unwrap_or(0.0);
-        if action.profficient.unwrap_or(false) {
+        if action.proficient.unwrap_or(false) {
             println!("Added Profficiency Bonus to {}", action.name);
             bonus = bonus + sheet.metadata.clone().proficiency_bonus;
         }
@@ -110,13 +110,13 @@ fn main() {
                 modifier: 0.0,
             })
             .modifier;
-        if saving_throw.profficient {
+        if saving_throw.proficient {
             value = value + sheet.clone().metadata.proficiency_bonus;
         };
         calculated_saving_throw.push(CalculatedSavingThrow {
             key: saving_throw.key,
             value: value,
-            profficient: saving_throw.profficient,
+            proficient: saving_throw.proficient,
         });
     }
 
@@ -134,14 +134,14 @@ fn main() {
                 modifier: 0.0,
             })
             .modifier;
-        if skill.profficient {
+        if skill.proficient {
             value = value + sheet.clone().metadata.proficiency_bonus;
         };
         calculated_skill.push(CalculatedSkill {
             key: skill.key,
             score_key: skill.score_key,
             value: value,
-            profficient: skill.profficient,
+            proficient: skill.proficient,
         })
     }
 
@@ -216,14 +216,14 @@ struct CalculatedSkill {
     key: String,
     score_key: String,
     value: f64,
-    profficient: bool,
+    proficient: bool,
 }
 
 #[derive(Debug)]
 struct CalculatedSavingThrow {
     key: String,
     value: f64,
-    profficient: bool,
+    proficient: bool,
 }
 
 #[derive(Debug)]

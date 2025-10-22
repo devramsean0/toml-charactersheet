@@ -63,7 +63,7 @@ pub struct CharacterAction {
     pub action_type: String,
     pub name: String,
     pub bonus_block: Option<String>,
-    pub profficient: Option<bool>,
+    pub proficient: Option<bool>,
     pub damage: Option<String>,
     pub dmg_type: Option<String>,
     pub magic_bonus: Option<bool>,
@@ -95,12 +95,12 @@ pub struct CharacterFeatures {
 #[derive(Deserialize, Debug, Clone)]
 pub struct CharacterSavingThrows {
     pub key: String,
-    pub profficient: bool,
+    pub proficient: bool,
 }
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct CharacterSkills {
     pub key: String,
     pub score_key: String,
-    pub profficient: bool,
+    pub proficient: bool,
 }
