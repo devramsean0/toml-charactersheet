@@ -262,6 +262,9 @@
                     <th>Name</th>
                     <th>ATK</th>
                     <th>Damage</th>
+                    {% if sheet.metadata.rage_count.is_some() %}
+                    <th>Rage Damage</th>
+                    {% endif %}
                     <th>Damage Type</th>
                     <th>Text</th>
                 </tr>
@@ -271,6 +274,9 @@
                     <td>{{ action.name }}</td>
                     <td>{{ action.atk_bonus }}</td>
                     <td>{% if let Some(damage) = action.damage %}{{ damage }}{% else %}-{% endif %}</td>
+                    {% if sheet.metadata.rage_count.is_some() %}
+                    <td>{% if let Some(damage) = action.rage_damage %}{{ damage }}{% else %}-{% endif %}</td>
+                    {% endif %}
                     <td>{% if let Some(dmg_type) = action.dmg_type %}{{ dmg_type }}{% else %}-{% endif %}</td>
                     <td>{{ action.text }}</td>
                 </tr>

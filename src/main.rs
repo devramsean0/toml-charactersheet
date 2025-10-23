@@ -76,20 +76,29 @@ fn main() {
             });
             calculated_action_counter = calculated_action_counter + 1;
         }
-        let mut damage: Option<String> = action.damage;
+        let mut damage: Option<String> = action.damage.clone();
+        let mut damage_bonus = bonus_block_obj
+            .map(|obj: &CalculatedScoreModifier| obj.modifier)
+            .unwrap_or(0.0);
+        let mut rage_damage = action.damage;
         if damage.is_some() {
-            let mut bonus = bonus_block_obj.map(|obj| obj.modifier).unwrap_or(0.0);
             if action.magic_bonus.unwrap_or(false) {
                 println!("Added Magic Bonus to {} damage", action.name);
-                bonus = bonus + 1.0;
+                damage_bonus = damage_bonus + 1.0;
             }
-            damage = Some(damage.unwrap() + "+" + bonus.to_string().as_str());
+            damage = Some(format!("{}+{}", damage.clone().unwrap(), damage_bonus));
         }
-
+        if rage_damage.is_some() && action.bonus_block == Some(String::from("str")) {
+            let rage_bonus_f = sheet.metadata.clone().rage_bonus.unwrap_or(0) as f64;
+            let total = damage_bonus + rage_bonus_f;
+            rage_damage = Some(format!("{}+{}", rage_damage.clone().unwrap(), total));
+            println!("Calculated Rage Damage for {}", action.name)
+        }
         calculated_action.push(CalculatedAction {
             action_type: action.action_type,
             name: action.name,
             damage: damage,
+            rage_damage: rage_damage,
             dmg_type: action.dmg_type,
             text: text,
             atk_bonus: bonus,
@@ -206,6 +215,7 @@ struct CalculatedAction {
     action_type: String,
     name: String,
     damage: Option<String>,
+    rage_damage: Option<String>,
     atk_bonus: f64,
     dmg_type: Option<String>,
     text: String,

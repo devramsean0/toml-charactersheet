@@ -35,6 +35,8 @@ pub struct CharacterMetadata {
     pub proficiency_bonus: f64,
     pub initiative: f64,
     pub passive_perception: i64,
+    pub rage_count: Option<i64>,
+    pub rage_bonus: Option<i64>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
