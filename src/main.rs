@@ -10,7 +10,10 @@ mod parser;
 #[clap(author = "Sean Outram", version, about)]
 struct Args {
     #[arg(short, long)]
-    path: String,
+    sheet_path: String,
+
+    #[arg(short, long)]
+    notes_path: String,
 }
 
 #[derive(Template)]
@@ -24,11 +27,12 @@ struct SheetTemplate {
     formatted_equipment: Vec<FormattedEquipment>,
     formatted_feats: Vec<FormattedFeatures>,
     tooltips: Vec<Tooltip>,
+    formatted_notes: Vec<FormattedNote>,
 }
 
 fn main() {
     let args = Args::parse();
-    let sheet = match parser::parse_sheet(args.path) {
+    let sheet = match parser::parse_sheet(args.sheet_path) {
         Ok(sheet) => sheet,
         Err(err) => {
             println!("Error reading sheet: {err}");
@@ -41,6 +45,7 @@ fn main() {
     let mut calculated_score_modifier: Vec<CalculatedScoreModifier> = vec![];
     for score in sheet.clone().scores {
         let modifier = (score.value - 10.0) / 2.0;
+        println!("Calculated Modifier {modifier} for score {}", score.key);
         calculated_score_modifier.push(CalculatedScoreModifier {
             name: score.key,
             total: score.value,
@@ -188,6 +193,21 @@ fn main() {
         });
     }
 
+    let mut formatted_notes: Vec<FormattedNote> = vec![];
+    for name in fs::read_dir(args.notes_path).unwrap() {
+        let file_name = name.unwrap().path();
+        if file_name.extension().and_then(|s| s.to_str()) == Some("md") {
+            let content = fs::read_to_string(&file_name).unwrap();
+            let title = file_name
+                .file_stem()
+                .and_then(|s| s.to_str())
+                .unwrap_or("Note")
+                .to_string();
+            let text = markdown::to_html(content.as_str());
+            formatted_notes.push(FormattedNote { title, text });
+        }
+    }
+
     let html = SheetTemplate {
         sheet: sheet,
         calculated_score_modifier: calculated_score_modifier,
@@ -197,6 +217,7 @@ fn main() {
         formatted_equipment: formatted_equipment,
         formatted_feats: formatted_features,
         tooltips: tooltips,
+        formatted_notes: formatted_notes,
     }
     .render()
     .expect("template should be valid");
@@ -251,5 +272,10 @@ struct FormattedFeatures {
 
 struct Tooltip {
     pub key: String,
+    pub text: String,
+}
+
+struct FormattedNote {
+    pub title: String,
     pub text: String,
 }

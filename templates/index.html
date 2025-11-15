@@ -319,6 +319,13 @@
         </tr>
         {% endfor %}
     </table>
+    <h1 class="text-xl">Notes</h1>
+    {% for note in formatted_notes %}
+    <div>
+        <h2 class="text-md">{{ note.title }}</h2>
+        <p>{{ note.text|safe }}</p>
+    </div>
+    {% endfor %}
 </body>
 
 </html>

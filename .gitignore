@@ -3,5 +3,6 @@
 /result-lib
 .direnv
 sheet.*
+notes/
 
 /.pre-commit-config.yaml
